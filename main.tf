@@ -22,3 +22,13 @@ module "ecs_cluster" {
     Project     = "BaitersBurger"
   }
 }
+
+module "ecr_order_app" {
+  source = "./elastic-container-registry"
+
+  tags = {
+    Environment = "dev"
+    Project     = "BaitersBurger"
+  }
+  
+}
