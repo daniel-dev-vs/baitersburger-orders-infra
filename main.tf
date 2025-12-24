@@ -13,8 +13,8 @@ module "dynamodb" {
 module "ecs_cluster" {
   source = "./cluster-ecs"
 
-  cluster_name        = "BaitersBurgerECSCluster"
-  capacity_providers  = ["FARGATE", "FARGATE_SPOT"]
+  cluster_name              = "BaitersBurgerECSCluster"
+  capacity_providers        = ["FARGATE", "FARGATE_SPOT"]
   enable_container_insights = true
 
   tags = {
@@ -30,5 +30,28 @@ module "ecr_order_app" {
     Environment = "dev"
     Project     = "BaitersBurger"
   }
-  
+
+}
+
+
+module "alb" {
+  source = "./alb"
+
+  tags = {
+    Environment = "dev"
+    Project     = "BaitersBurger"
+  }
+}
+
+module "api-gateway" {
+  source = "./api-gateway"
+
+  tags = {
+    Environment = "dev"
+    Project     = "BaitersBurger"
+  }
+
+  alb_dns_name      = module.alb.alb_dns_name
+  alb_listener_path = "/api/v1"
+  aws_region        = "us-east-1"
 }

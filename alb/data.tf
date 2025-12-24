@@ -13,15 +13,3 @@ data "aws_subnets" "aws_subnets_default" {
     values = ["true"]
   }
 }
-
-data "aws_security_group" "alb_sg" {
-  filter {
-    name   = "group-name"
-    values = ["default"]
-  }
-
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.aws_vpc_default.id]
-  }
-}
