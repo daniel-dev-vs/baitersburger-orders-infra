@@ -78,7 +78,7 @@ paths:
         responses:
           default:
             statusCode: 200
-  /webhooks:
+  /orders/webhooks:
     post:
       summary: Webhook for orders
       responses:
@@ -91,7 +91,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http_proxy
         httpMethod: POST
-        uri: http://${alb_dns_name}/webhooks
+        uri: http://${alb_dns_name}/orders/webhooks
         passthroughBehavior: when_no_match
         integrationResponses:
           - statusCode: 200
