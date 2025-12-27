@@ -21,6 +21,12 @@ paths:
             application/json:
               schema:
                 type: object
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found  
+        '500':
+          description: Internal Server Error                
       x-amazon-apigateway-integration:
         type: http_proxy
         httpMethod: GET
@@ -40,6 +46,12 @@ paths:
             application/json:
               schema:
                 type: object
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found  
+        '500':
+          description: Internal Server Error                
       x-amazon-apigateway-integration:
         type: http_proxy
         httpMethod: POST
@@ -66,6 +78,12 @@ paths:
             application/json:
               schema:
                 type: object
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found  
+        '500':
+          description: Internal Server Error
       x-amazon-apigateway-integration:
         type: http_proxy
         httpMethod: GET
@@ -88,6 +106,12 @@ paths:
             application/json:
               schema:
                 type: object
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found  
+        '500':
+          description: Internal Server Error                
       x-amazon-apigateway-integration:
         type: http_proxy
         httpMethod: POST
@@ -98,4 +122,10 @@ paths:
         responses:
           default:
             statusCode: 200
-           
+x-amazon-apigateway-gateway-responses:
+  DEFAULT_4XX:
+    responseTemplates:
+      application/json: '{"message": "Client error", "error": "$context.error.message"}'
+  DEFAULT_5XX:
+    responseTemplates:
+      application/json: '{"message": "Server error", "error": "$context.error.message"}'

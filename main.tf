@@ -55,3 +55,15 @@ module "api-gateway" {
   alb_listener_path = "/api/v1"
   aws_region        = "us-east-1"
 }
+
+module "secret_manager_orders_app" {
+  source = "./secret-manager"
+
+  name        = "OrdersAppSecretManager"
+  description = "Secret for Orders App"
+
+  tags = {
+    Environment = "dev"
+    Project     = "BaitersBurger"
+  }
+}
