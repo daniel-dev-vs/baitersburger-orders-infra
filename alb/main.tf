@@ -3,7 +3,6 @@ resource "aws_security_group" "alb_sg" {
   description = "Security group for ALB - allows HTTP/HTTPS traffic"
   vpc_id      = data.aws_vpc.aws_vpc_default.id
 
-  # Permite tráfego HTTP de entrada
   ingress {
     description = "HTTP from internet"
     from_port   = 80
@@ -12,7 +11,6 @@ resource "aws_security_group" "alb_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Permite tráfego HTTPS de entrada (opcional)
   ingress {
     description = "HTTPS from internet"
     from_port   = 443
@@ -21,7 +19,6 @@ resource "aws_security_group" "alb_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Permite todo tráfego de saída
   egress {
     description = "Allow all outbound traffic"
     from_port   = 0

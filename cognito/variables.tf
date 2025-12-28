@@ -5,7 +5,7 @@ variable "pool_name" {
 
 variable "domain_prefix" {
   type        = string
-  description = "Prefixo único para o domínio do Cognito (ex: baiters-orders)"
+  description = "Unique prefix for the Cognito domain (e.g., baiters-orders)"
 }
 
 variable "aws_region" {
@@ -23,5 +23,5 @@ variable "tags" {
 
 variable "lambda_authorizer_role_arn" {
   type        = string
-  description = "ARN da IAM Role já existente para o Lambda Authorizer"
+  description = "IAM Role already existing for the Lambda Authorizer"
 }

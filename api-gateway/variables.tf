@@ -1,17 +1,17 @@
 variable "alb_dns_name" {
   type        = string
-  description = "DNS público do ALB (ex: my-alb-123.us-east-1.elb.amazonaws.com)"
+  description = "Public DNS of the ALB (ex: my-alb-123.us-east-1.elb.amazonaws.com)"
 }
 
 variable "alb_listener_path" {
   type        = string
-  description = "Path base exposto pelo ALB (ex: /api/v1)"
+  description = "Base path exposed by the ALB (ex: /api/v1)"
   default     = "/"
 }
 
 variable "aws_region" {
   type        = string
-  description = "aws region to deploy resources"
+  description = "AWS region to deploy resources"
   default     = "us-east-1"
 }
 
@@ -27,32 +27,32 @@ variable "tags" {
 
 variable "cognito_user_pool_arn" {
   type        = string
-  description = "ARN do Cognito User Pool para o authorizer do API Gateway"
+  description = "ARN of the Cognito User Pool for the API Gateway authorizer"
 }
 
 variable "cognito_user_pool_id" {
   type        = string
-  description = "ID do Cognito User Pool (ex: us-east-1_XXXXXX)"
+  description = "ID of the Cognito User Pool (ex: us-east-1_XXXXXX)"
 }
 
 variable "authorizer_required_scopes" {
   type        = string
-  description = "Escopos requeridos (ex: \"orders/read orders/write\")"
+  description = "Required scopes (ex: \"orders/read orders/write\")"
   default     = ""
 }
 
 variable "lambda_authorizer_function_invoke_arn" {
   type        = string
-  description = "ARN da IAM Role já existente para o Lambda Authorizer"
+  description = "ARN of the existing IAM Role for the Lambda Authorizer"
 }
 
 variable "lambda_authorizer_function_name" {
   type        = string
-  description = "ARN da IAM Role já existente para o Lambda Authorizer"
+  description = "Name of the existing Lambda Authorizer function"
 }
 
 variable "lambda_authorizer_role_arn" {
   type        = string
-  description = "ARN da IAM Role já existente para o Lambda Authorizer"
+  description = "ARN of the existing IAM Role for the Lambda Authorizer"
 }
 

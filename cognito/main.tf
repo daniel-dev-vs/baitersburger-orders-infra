@@ -1,7 +1,6 @@
 resource "aws_cognito_user_pool" "orders" {
   name = var.pool_name
 
-  # Sem usuários: não precisa alias/verified attributes
   password_policy {
     minimum_length    = 8
     require_lowercase = true
@@ -14,10 +13,9 @@ resource "aws_cognito_user_pool" "orders" {
   tags              = var.tags
 }
 
-# Resource Server com scopes (ex.: orders/read, orders/write)
 resource "aws_cognito_resource_server" "orders_api" {
   user_pool_id = aws_cognito_user_pool.orders.id
-  identifier   = "orders"         # fica no aud/scope identifier
+  identifier   = "orders"         
   name         = "Orders API"
 
   scope {
@@ -52,7 +50,6 @@ resource "aws_cognito_user_pool_client" "orders_app" {
   }
 }
 
-# Domínio para emissão de tokens via /oauth2/token
 resource "aws_cognito_user_pool_domain" "orders_domain" {
   domain      = var.domain_prefix
   user_pool_id = aws_cognito_user_pool.orders.id
