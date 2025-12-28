@@ -24,6 +24,14 @@ jobs:
       - name: Add Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Install Lambda dependencies
+        run: |
+          mkdir -p lambda_layers/python
+          pip install python-jose[cryptography] -t lambda_layers/python/
+          cd lambda_layers
+          zip -r ../python_jose_layer.zip .
+          cd ..
+
       - name: Set up infrastructure
         run: terraform init
 

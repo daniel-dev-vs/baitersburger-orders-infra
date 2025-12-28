@@ -1,11 +1,3 @@
-resource "aws_api_gateway_rest_api" "orders_api" {
-  name        = "orders-api-gateway"
-  description = "API Gateway para integrar com o ALB da aplicação de pedidos"
-  
-  body = templatefile("${path.module}/openapi.yaml", {
-    alb_dns_name = var.alb_dns_name
-  })
-}
 
 resource "aws_api_gateway_deployment" "orders_deployment" {
   rest_api_id = aws_api_gateway_rest_api.orders_api.id
@@ -27,4 +19,24 @@ resource "aws_api_gateway_stage" "orders_stage" {
 
 output "api_gateway_orders_url" {
   value = "${aws_api_gateway_stage.orders_stage.invoke_url}/orders"
+}
+
+resource "aws_api_gateway_rest_api" "orders_api" {
+  name        = "orders-api-gateway"
+  description = "API Gateway for integration with the ALB of the orders application"
+  body = templatefile("${path.module}/openapi.yaml", {
+    alb_dns_name            = var.alb_dns_name
+    cognito_user_pool_arn   = var.cognito_user_pool_arn
+    authorizer_invoke_arn   = var.lambda_authorizer_function_invoke_arn
+  })
+
+}
+
+
+resource "aws_lambda_permission" "apigw_lambda" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = var.lambda_authorizer_function_name 
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.orders_api.execution_arn}/*/*"
 }

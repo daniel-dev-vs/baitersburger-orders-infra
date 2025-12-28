@@ -24,3 +24,35 @@ variable "tags" {
     Environment = "dev"
   }
 }
+
+variable "cognito_user_pool_arn" {
+  type        = string
+  description = "ARN do Cognito User Pool para o authorizer do API Gateway"
+}
+
+variable "cognito_user_pool_id" {
+  type        = string
+  description = "ID do Cognito User Pool (ex: us-east-1_XXXXXX)"
+}
+
+variable "authorizer_required_scopes" {
+  type        = string
+  description = "Escopos requeridos (ex: \"orders/read orders/write\")"
+  default     = ""
+}
+
+variable "lambda_authorizer_function_invoke_arn" {
+  type        = string
+  description = "ARN da IAM Role já existente para o Lambda Authorizer"
+}
+
+variable "lambda_authorizer_function_name" {
+  type        = string
+  description = "ARN da IAM Role já existente para o Lambda Authorizer"
+}
+
+variable "lambda_authorizer_role_arn" {
+  type        = string
+  description = "ARN da IAM Role já existente para o Lambda Authorizer"
+}
+

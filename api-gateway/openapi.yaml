@@ -8,6 +8,8 @@ paths:
   /orders:
     get:
       summary: Get orders
+      security:
+        - CustomAuthorizer: []
       parameters:
         - name: status
           in: query
@@ -39,6 +41,8 @@ paths:
             statusCode: 200
     post:
       summary: POST order
+      security:
+        - CustomAuthorizer: []
       responses:
         '200':
           description: Successful response
@@ -65,6 +69,8 @@ paths:
   /orders/{orderId}:
     get:
       summary: Get order by ID
+      security:
+        - CustomAuthorizer: []
       parameters:
         - name: orderId
           in: path
@@ -99,6 +105,7 @@ paths:
   /orders/webhooks:
     post:
       summary: Webhook for orders
+      security: []
       responses:
         '200':
           description: Successful response
@@ -129,3 +136,14 @@ x-amazon-apigateway-gateway-responses:
   DEFAULT_5XX:
     responseTemplates:
       application/json: '{"message": "Server error", "error": "$context.error.message"}'
+components:
+  securitySchemes:
+    CustomAuthorizer:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: oauth2
+      x-amazon-apigateway-authorizer:
+        type: token
+        authorizerUri: ${authorizer_invoke_arn}
+        authorizerResultTtlInSeconds: 300
