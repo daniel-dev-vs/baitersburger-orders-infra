@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Orders API Gateway
-  description: API Gateway para integrar com o ALB da aplicação de pedidos
+  description: API Gateway for integrating with the ALB of the orders application
   version: 1.0.0
 
 paths:
