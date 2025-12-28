@@ -5,13 +5,11 @@ import urllib.request
 from jose import jwk, jwt
 from jose.utils import base64url_decode
 
-# Variáveis configuradas via Terraform
 REGION = os.environ['AWS_REGION']
 USER_POOL_ID = os.environ['USER_POOL_ID']
 APP_CLIENT_ID = os.environ['APP_CLIENT_ID']
 KEYS_URL = f"https://cognito-idp.{REGION}.amazonaws.com/{USER_POOL_ID}/.well-known/jwks.json"
 
-# Cache das chaves públicas do Cognito
 keys = None
 
 def get_keys():
@@ -24,7 +22,6 @@ def get_keys():
 def handler(event, context):
     token = event.get('authorizationToken', '')
     
-    # Valida se é um Bearer token
     if not token.startswith('Bearer '):
         raise Exception('Unauthorized')
     
@@ -32,7 +29,6 @@ def handler(event, context):
     method_arn = event.get('methodArn')
 
     try:
-        # 1. Validar Assinatura e Claims do JWT
         public_keys = get_keys()
         header = jwt.get_unverified_header(token)
         kid = header['kid']
@@ -43,26 +39,33 @@ def handler(event, context):
                 break
         
         if key_index == -1:
-            print('Chave pública não encontrada')
+            print('Public key not found in jwks.json')
             raise Exception('Unauthorized')
 
-        # Decodifica e valida (issuer e client_id)
         decoded = jwt.decode(
             token,
             public_keys[key_index],
             algorithms=['RS256'],
-            audience=None, # client_credentials não costuma ter aud, validamos o client_id se necessário
+            audience=None, 
             issuer=f"https://cognito-idp.{REGION}.amazonaws.com/{USER_POOL_ID}"
         )
 
-        # 2. Lógica de Scopes
-        # O Cognito coloca os scopes em uma string separada por espaços no claim 'scope'
-        token_scopes = decoded.get('scope', '').split(' ')
         
-        # Exemplo: permitir acesso se tiver o scope 'orders/manage'
-        # Você pode customizar para validar baseado no method_arn se quiser granularidade total
-        is_authorized = 'orders/manage' in token_scopes
+        token_scopes = decoded.get('scope', '').split(' ')
 
+        arn_parts = method_arn.split(':')
+        api_gateway_parts = arn_parts[-1].split('/')
+        http_method = api_gateway_parts[2]
+        
+        is_authorized = False
+        
+        if http_method == 'GET':
+            is_authorized = 'orders/read' in token_scopes
+        elif http_method == 'POST':
+            is_authorized = 'orders/write' in token_scopes
+        else:
+            is_authorized = 'orders/read' in token_scopes or 'orders/write' in token_scopes
+        
         return generate_policy('user', 'Allow' if is_authorized else 'Deny', method_arn)
 
     except Exception as e:
