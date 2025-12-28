@@ -99,6 +99,7 @@ paths:
   /orders/webhooks:
     post:
       summary: Webhook for orders
+      security: []
       responses:
         '200':
           description: Successful response

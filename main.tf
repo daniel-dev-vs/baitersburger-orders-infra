@@ -43,8 +43,22 @@ module "alb" {
   }
 }
 
+module "cognito" {
+  source                     = "./cognito"
+  aws_region                 = "us-east-1"
+  domain_prefix              = "baiters-orders"
+  lambda_authorizer_role_arn = data.aws_iam_role.lab_role.arn
+  tags = {
+    Environment = "dev"
+    Project     = "BaitersBurger"
+  }
+}
+
 module "api-gateway" {
-  source = "./api-gateway"
+  source                     = "./api-gateway"
+  cognito_user_pool_arn      = module.cognito.user_pool_arn
+  cognito_user_pool_id       = module.cognito.user_pool_id
+  lambda_authorizer_role_arn = data.aws_iam_role.lab_role.arn
 
   tags = {
     Environment = "dev"
@@ -53,7 +67,6 @@ module "api-gateway" {
 
   alb_dns_name      = module.alb.alb_dns_name
   alb_listener_path = "/api/v1"
-  aws_region        = "us-east-1"
 }
 
 module "secret_manager_orders_app" {
@@ -67,3 +80,4 @@ module "secret_manager_orders_app" {
     Project     = "BaitersBurger"
   }
 }
+
