@@ -41,7 +41,18 @@ variable "authorizer_required_scopes" {
   default     = ""
 }
 
+variable "lambda_authorizer_function_invoke_arn" {
+  type        = string
+  description = "ARN da IAM Role já existente para o Lambda Authorizer"
+}
+
+variable "lambda_authorizer_function_name" {
+  type        = string
+  description = "ARN da IAM Role já existente para o Lambda Authorizer"
+}
+
 variable "lambda_authorizer_role_arn" {
   type        = string
   description = "ARN da IAM Role já existente para o Lambda Authorizer"
 }
+

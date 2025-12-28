@@ -55,10 +55,12 @@ module "cognito" {
 }
 
 module "api-gateway" {
-  source                     = "./api-gateway"
-  cognito_user_pool_arn      = module.cognito.user_pool_arn
-  cognito_user_pool_id       = module.cognito.user_pool_id
-  lambda_authorizer_role_arn = data.aws_iam_role.lab_role.arn
+  source                                = "./api-gateway"
+  cognito_user_pool_arn                 = module.cognito.user_pool_arn
+  cognito_user_pool_id                  = module.cognito.user_pool_id
+  lambda_authorizer_role_arn            = data.aws_iam_role.lab_role.arn
+  lambda_authorizer_function_invoke_arn = module.lambda_authorizer.invoke_arn
+  lambda_authorizer_function_name       = module.lambda_authorizer.function_name
 
   tags = {
     Environment = "dev"
@@ -74,6 +76,19 @@ module "secret_manager_orders_app" {
 
   name        = "OrdersAppSecretManager"
   description = "Secret for Orders App"
+
+  tags = {
+    Environment = "dev"
+    Project     = "BaitersBurger"
+  }
+}
+
+
+module "lambda_authorizer" {
+  source = "./lambda-authorizer"
+
+  cognito_user_pool_id = module.cognito.user_pool_id
+  cognito_client_id    = module.cognito.client_id
 
   tags = {
     Environment = "dev"
