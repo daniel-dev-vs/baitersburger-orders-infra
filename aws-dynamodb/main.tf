@@ -15,16 +15,15 @@ resource "aws_dynamodb_table" "orders" {
 
   attribute {
     name = "createdAt"
-    type = "S" # ou "N" se for timestamp numérico
+    type = "S" 
   }
 
-  # GSI para consultar pedidos por status e ordenar por createdAt
   global_secondary_index {
     name               = "status-createdAt-index"
     hash_key           = "status"
     range_key          = "createdAt"
-    projection_type    = "INCLUDE"                     # ou "ALL" / "KEYS_ONLY"
-    non_key_attributes = ["customerId", "totalPrice", "productsId"] # ajuste conforme necessário
+    projection_type    = "INCLUDE"                     
+    non_key_attributes = ["customerId", "totalPrice", "productsId"]
   }
 
   tags = var.tags
